@@ -13,11 +13,18 @@ class OrderController {
       const payload = req.body;
       const order = await this.createOrder.execute(payload.order);
 
-      res.status(201).json({
-        success: true,
-        msg: `Order successfully created`,
-        data: order,
-      });
+      if (order.success) {
+        return res.status(201).json({
+          success: true,
+          msg: `Order was successful`,
+          order: order,
+        });
+      } else {
+        return res.status(400).json({
+          success: false,
+          msg: `Order failed`,
+        });
+      }
     } catch (error) {
       if (error instanceof Error) {
         res.status(400).json({ success: false, msg: `${error.message}` });

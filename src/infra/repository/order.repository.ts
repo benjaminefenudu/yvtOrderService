@@ -26,6 +26,17 @@ class OrderRepository {
       throw error;
     }
   }
+
+  async findOrder(orderId: string) {
+    try {
+      const order = await this.orderModel.findById(orderId);
+      if (!order) throw new Error('Order not found');
+
+      return order;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default OrderRepository;
