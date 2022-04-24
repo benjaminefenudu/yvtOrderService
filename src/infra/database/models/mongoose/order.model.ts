@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 export interface OrderDetails {
   customerId: string;
   productId: string;
+  orderStatus: string;
   amount: number;
   quantity: number;
 }
@@ -21,6 +22,10 @@ const orderSchema = new mongoose.Schema(
     productId: {
       type: String,
       required: true,
+    },
+    orderStatus: {
+      type: String,
+      default: 'pending',
     },
     quantity: {
       type: Number,

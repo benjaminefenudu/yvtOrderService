@@ -11,8 +11,7 @@ class OrderController {
   async create(req: Request, res: Response) {
     try {
       const payload = req.body;
-      console.log(req.body);
-      const order = await this.createOrder.execute(payload);
+      const order = await this.createOrder.execute(payload.order);
 
       res.status(201).json({
         success: true,

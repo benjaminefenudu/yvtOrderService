@@ -21,7 +21,7 @@ class CreateOrder {
   async execute(payload: OrderDocument) {
     try {
       // Check if product is available
-      console.log(payload)
+      console.log(payload);
       axios
         .post(`${process.env.PRODUCT_SERVICE_URL}/available`, {
           order: {
@@ -31,21 +31,28 @@ class CreateOrder {
         })
         .then(async (response) => {
           if (response.data.productAvailable) {
-            const order = await this.orderRepository.create(payload);
-            await order.save();
+            const newOrder = await this.orderRepository.create(payload);
+            await newOrder.save();
 
-            console.log('order', order);
+            const order = {
+              customerId: payload.customerId,
+              productId: payload.productId,
+              orderId: (newOrder._id).toString(),
+              amount: payload.amount,
+              quantity: payload.quantity,
+              orderStatus: newOrder.orderStatus,
+            };
 
-            // axios
-            //   .post(`${process.env.PAYMENT_SERVICE_URL}`, {
-            //     order: order,
-            //   })
-            //   .then((res) => {
-            //     console.log(res.data);
-            //   })
-            //   .catch((error) => {
-            //     console.log('error: ', error?.message);
-            //   });
+            axios
+              .post(`${process.env.PAYMENT_SERVICE_URL}`, {
+                order: order,
+              })
+              .then((res) => {
+                console.log(res.data);
+              })
+              .catch((error) => {
+                console.log('error: ', error?.message);
+              });
           } else {
             console.log('Product not available');
           }
