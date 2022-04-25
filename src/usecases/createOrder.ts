@@ -64,6 +64,7 @@ class CreateOrder {
             return orderDetails;
           } else {
             console.log('Product not available');
+            return;
           }
         })
         .catch((error) => {

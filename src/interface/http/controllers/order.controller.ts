@@ -10,10 +10,10 @@ class OrderController {
 
   async create(req: Request, res: Response) {
     try {
-      const payload = req.body;
-      const order = await this.createOrder.execute(payload.order);
+      const payload = req.body.order;
+      const order = await this.createOrder.execute(payload);
 
-      if (order.success) {
+      if (order?.success) {
         return res.status(201).json({
           success: true,
           msg: `Order was successful`,
