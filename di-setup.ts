@@ -11,6 +11,7 @@ import Messenger from './src/utils/messenger.utils';
 import OrderModel from './src/infra/database/models/mongoose/order.model';
 import OrderRepository from './src/infra/repository/order.repository';
 import CreateOrder from './src/usecases/createOrder';
+import PayForOrder from './src/usecases/payForOrder';
 import OrderController from './src/interface/http/controllers/order.controller';
 
 const container = createContainer({
@@ -23,6 +24,7 @@ container.register({
   orderModel: asValue(OrderModel),
   orderRepository: asClass(OrderRepository),
   createOrder: asClass(CreateOrder),
+  payForOrder: asClass(PayForOrder),
   orderController: asClass(OrderController),
 });
 

@@ -21,7 +21,7 @@ class CreateOrder {
   async execute(payload: OrderDocument) {
     try {
       // Check if product is available
-      const orderSummary = await axios
+      const createdOrder = axios
         .post(`${process.env.PRODUCT_SERVICE_URL}/available`, {
           order: {
             productId: payload.productId,
@@ -41,36 +41,15 @@ class CreateOrder {
               quantity: payload.quantity,
               orderStatus: newOrder.orderStatus,
             };
-
-            const orderDetails = await axios
-              .post(`${process.env.PAYMENT_SERVICE_URL}`, {
-                order: order,
-              })
-              .then(async (res) => {
-                if (res.data.success) {
-                  const orderId = res.data.payment.orderId;
-                  let foundOrder = await this.orderRepository.findOrder(
-                    orderId
-                  );
-                  foundOrder.orderStatus = 'complete';
-                  await foundOrder.save();
-
-                  return res.data;
-                }
-              })
-              .catch((error) => {
-                console.log('error: ', error?.message);
-              });
-            return orderDetails;
+            return order;
           } else {
             console.log('Product not available');
-            return;
           }
         })
         .catch((error) => {
           console.log('error: ', error?.message);
         });
-      return orderSummary;
+        return createdOrder
     } catch (error) {
       throw error;
     }
